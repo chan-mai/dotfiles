@@ -1,0 +1,20 @@
+[user]
+	name = mq1
+	email = chan-mai@mq1.dev
+	signingkey = /Users/mq1/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[alias]
+	today = log --since=midnight --author='mq1' --oneline
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowedSigners
+[coderabbit]
+	machineId = cli/e0222bb3326f4649a028a5cceca1b536
+[credential "https://github.com"]
+	helper = 
+	helper = !/run/current-system/sw/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/run/current-system/sw/bin/gh auth git-credential

@@ -1,0 +1,19 @@
+
+background-opacity = 0.70
+background-blur-radius = 45
+
+font-family = Fira Code
+font-family = Source Han Code JP
+font-family = monospace
+font-size = 14
+
+theme = Rose Pine Moon
+
+# タイピング中にマウスカーソルを隠す
+mouse-hide-while-typing = true
+# ウィンドウ枠/タイトルバー等の装飾を表示
+
+window-decoration = true
+cursor-color = FF88FF
+cursor-style-blink = true
+

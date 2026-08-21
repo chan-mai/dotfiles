@@ -1,0 +1,2 @@
+# home-manager管理の環境変数
+[ -f /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh ] && . /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh
