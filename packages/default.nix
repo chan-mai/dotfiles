@@ -7,7 +7,6 @@
     awscli2
     btop
     cmake
-    (pkgs.callPackage ./coderabbit-cli { })
     dotslash
     fastfetch
     ffmpeg
@@ -30,6 +29,7 @@
     oxipng
     pnpm
     poppler-utils
+    postgresql
     rdap
     ripgrep
     rustup
@@ -43,11 +43,6 @@
       dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
     }))
     zsh-autosuggestions
-    # GUI
-    bitwarden-desktop
-    ghostty-bin
-    maccy
-    wireshark
   ];
 
   fonts.packages = with pkgs; [

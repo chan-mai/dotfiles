@@ -1,8 +1,18 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   # terraform用(BUSL)
   nixpkgs.config.allowUnfree = true;
+
+  # darwin固有パッケージ
+  environment.systemPackages = with pkgs; [
+    (pkgs.callPackage ../../../packages/coderabbit-cli { })
+    # GUI
+    bitwarden-desktop
+    ghostty-bin
+    maccy
+    wireshark
+  ];
 
   users.users.mq1.home = "/Users/mq1";
   # system.defaultsの書き込み先ユーザー
