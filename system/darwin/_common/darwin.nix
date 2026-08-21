@@ -5,12 +5,43 @@
   nixpkgs.config.allowUnfree = true;
 
   users.users.mq1.home = "/Users/mq1";
+  # system.defaultsの書き込み先ユーザー
+  system.primaryUser = "mq1";
 
   # Nix本体はDeterminate Nixが管理
   nix.enable = false;
 
   # sudoのTouch ID認証
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  # Dock
+  system.defaults.dock = {
+    tilesize = 49;
+    show-recents = false;
+  };
+
+  # Finder
+  system.defaults.finder = {
+    # リスト表示
+    FXPreferredViewStyle = "Nlsv";
+    ShowMountedServersOnDesktop = true;
+  };
+
+  # Global settings
+  system.defaults.NSGlobalDomain = {
+    AppleShowAllExtensions = true;
+    # Fnキーを標準ファンクションキーとして使用
+    "com.apple.keyboard.fnState" = true;
+    # 軌跡の速さ
+    "com.apple.trackpad.scaling" = 3.0;
+  };
+
+  # Trackpad
+  system.defaults.trackpad = {
+    # タップでクリック
+    Clicking = true;
+    TrackpadThreeFingerDrag = true;
+  };
 
   # Wiresharkキャプチャ用/dev/bpf*権限設定(ChmodBPF相当)
   launchd.daemons.chmod-bpf = {
