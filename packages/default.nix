@@ -53,7 +53,9 @@
   ];
 
   fonts.packages = with pkgs; [
+    fira-code
     nerd-fonts.blex-mono
     noto-fonts-cjk-sans
+    source-han-code-jp
   ];
 }
