@@ -12,5 +12,21 @@
       "command": ["prettier", "--write", "$FILE"],
       "extensions": [".js", ".ts", ".tsx", ".vue"]
     }
+  },
+  "agent": {
+    "reviewer": {
+      "description": "Code review agent with read-only permissions for analyzing code quality",
+      "mode": "subagent",
+      "prompt": "You are a code reviewer specialized in analyzing code quality, best practices, security vulnerabilities, and potential bugs. You can read files, search code patterns using glob and grep, and provide detailed feedback. You cannot modify files.",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      },
+      "permission": {
+        "edit": "deny",
+        "bash": "deny"
+      }
+    }
   }
 }
