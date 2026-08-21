@@ -12,6 +12,7 @@
     ffmpeg
     gh
     go
+    go-task
     (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
       beta
       config-connector

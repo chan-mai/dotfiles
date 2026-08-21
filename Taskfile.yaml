@@ -1,0 +1,48 @@
+version: "3"
+
+silent: true
+
+tasks:
+  default:
+    cmds:
+      - task: edit
+
+  tasks:
+    desc: "Show task list"
+    cmds:
+      - task --list
+
+  edit:
+    desc: "Open dotfiles in editor"
+    cmds:
+      - code ~/dotfiles
+
+  apply:
+    desc: "Apply nix-darwin configuration"
+    vars:
+      HOSTNAME:
+        sh: scutil --get LocalHostName
+    cmds:
+      - sudo darwin-rebuild switch --flake "$HOME/dotfiles/system/darwin#{{.HOSTNAME}}"
+
+  apply:update:
+    desc: "Update flake.lock, apply, and push"
+    cmds:
+      - nix flake update --flake "$HOME/dotfiles/system/darwin"
+      - task: apply
+      - task: push-flake-lock
+
+  push-flake-lock:
+    desc: "Push flake.lock to GitHub"
+    internal: true
+    dir: "{{.ROOT_DIR}}"
+    cmds:
+      - |
+        LOCKFILE="system/darwin/flake.lock"
+        if [ -z "$(git status --porcelain -- "$LOCKFILE")" ]; then
+          echo "flake.lock is up to date, nothing to push"
+          exit 0
+        fi
+        git add "$LOCKFILE"
+        git commit -m "chore(deps): update darwin flake.lock"
+        git push origin HEAD
