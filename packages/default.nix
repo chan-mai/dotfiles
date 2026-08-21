@@ -6,6 +6,7 @@
     argocd
     awscli2
     btop
+    claude-code
     cmake
     dotslash
     fastfetch
@@ -26,11 +27,13 @@
     mkcert
     mysql84
     nodejs_22
+    opencode
     osv-scanner
     oxipng
     pnpm
     poppler-utils
     postgresql
+    prettier
     rdap
     ripgrep
     rustup
@@ -39,6 +42,7 @@
     terraform
     uv
     wasm-pack
+    wrangler
     # curl-cffi 0.15はdarwinビルド不可, unstable到達後に除外解除
     (yt-dlp.overridePythonAttrs (old: {
       dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
