@@ -8,10 +8,10 @@
   environment.systemPackages = with pkgs; [
     (pkgs.callPackage ../../../packages/coderabbit-cli { })
     # GUI
-    bitwarden-desktop
     ghostty-bin
     maccy
-    wireshark
+    scroll-reverser
+    slack
   ];
 
   users.users.mq1.home = "/Users/mq1";
@@ -23,6 +23,14 @@
 
   # sudoのTouch ID認証
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  # nixpkgs側の改変で署名破損したアプリをad-hoc再署名
+  system.activationScripts.postActivation.text = ''
+    if [ -d "/Applications/Nix Apps/Scroll Reverser.app" ]; then
+      /usr/bin/codesign --force --deep --sign - --preserve-metadata=entitlements \
+        "/Applications/Nix Apps/Scroll Reverser.app" 2>/dev/null || true
+    fi
+  '';
 
   # Dock
   system.defaults.dock = {

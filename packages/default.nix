@@ -43,6 +43,12 @@
       dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
     }))
     zsh-autosuggestions
+    # GUI
+    bitwarden-desktop
+    dbeaver-bin
+    google-chrome
+    vscode
+    wireshark
   ];
 
   fonts.packages = with pkgs; [
