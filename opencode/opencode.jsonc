@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["oh-my-openagent@latest"],
   "permission": {
     "bash": {
       "git push*": "deny",

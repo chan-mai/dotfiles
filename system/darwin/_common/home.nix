@@ -14,8 +14,6 @@ in
     PNPM_HOME = "$HOME/Library/pnpm";
     # nixストアは書き込み不可, npmグローバルは専用ディレクトリ
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
-    # oh-my-opencode テレメトリ無効化
-    OMO_SEND_ANONYMOUS_TELEMETRY = "0";
   };
 
   home.sessionPath = [
