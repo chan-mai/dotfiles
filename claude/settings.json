@@ -67,5 +67,6 @@
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "inputNeededNotifEnabled": true
 }

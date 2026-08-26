@@ -2,8 +2,18 @@
   "$schema": "https://opencode.ai/config.json",
   "permission": {
     "bash": {
-      "git push*": "deny",
-      "git commit*": "ask"
+      "git push*": "ask",
+      "git commit*": "ask",
+      "git reset --hard*": "ask",
+      "git clean*": "ask",
+      "git branch -D*": "ask",
+      "sudo *": "ask",
+      "wrangler deploy*": "ask",
+      "vercel deploy*": "ask",
+      "npm publish*": "ask",
+      "kubectl delete*": "ask",
+      "terraform apply*": "ask",
+      "terraform destroy*": "ask"
     }
   },
   "formatter": {
