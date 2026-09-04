@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    age
     ansible
     argocd
     awscli2
@@ -24,6 +25,7 @@
     kubectl
     kubelogin-oidc
     kubernetes-helm
+    kustomize
     mkcert
     mysql84
     nodejs_22
@@ -37,6 +39,7 @@
     rdap
     ripgrep
     rustup
+    sops
     sshpass
     ssm-session-manager-plugin
     terraform
