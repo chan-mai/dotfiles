@@ -36,6 +36,7 @@
     poppler-utils
     postgresql
     prettier
+    python3
     rdap
     ripgrep
     rustup

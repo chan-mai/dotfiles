@@ -4,7 +4,7 @@
     "pr": "",
     "sessionUrl": false
   },
-  "model": "fable",
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -67,6 +67,6 @@
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
-  "agentPushNotifEnabled": true,
-  "inputNeededNotifEnabled": true
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
 }
