@@ -12,6 +12,7 @@
     maccy
     scroll-reverser
     slack
+    (pkgs.callPackage ../../../packages/vlc { })
   ];
 
   users.users.mq1.home = "/Users/mq1";
@@ -30,6 +31,10 @@
       /usr/bin/codesign --force --deep --sign - --preserve-metadata=entitlements \
         "/Applications/Nix Apps/Scroll Reverser.app" 2>/dev/null || true
     fi
+
+    # VLCのBlu-ray AACS復号用, dyldフォールバック検索対象へ配置
+    mkdir -p /usr/local/lib
+    ln -sfn ${pkgs.libaacs}/lib/libaacs.0.dylib /usr/local/lib/libaacs.dylib
   '';
 
   # Dock
