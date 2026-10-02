@@ -4,7 +4,7 @@
     "pr": "",
     "sessionUrl": false
   },
-  "model": "claude-fable-5[1m]",
+  "model": "opus[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -67,7 +67,7 @@
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
+  "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "switchModelsOnFlag": false
+  "agentPushNotifEnabled": true
 }
