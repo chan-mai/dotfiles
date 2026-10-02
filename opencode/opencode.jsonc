@@ -1,5 +1,23 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "strata": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Strata (CYBER-FROST)",
+      "options": {
+        "baseURL": "http://100.78.93.11:8080/v1",
+        "apiKey": "{env:STRATA_API_KEY}"
+      },
+      "models": {
+        "cyber-frost-3.8-q3_k_m": {
+          "name": "CYBER-FROST 3.8 Q3_K_M",
+          "tool_call": true,
+          "limit": { "context": 32768, "output": 8192 }
+        }
+      }
+    }
+  },
+  "model": "strata/cyber-frost-3.8-q3_k_m",
   "permission": {
     "bash": {
       "git push*": "ask",
