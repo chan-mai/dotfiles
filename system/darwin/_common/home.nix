@@ -39,6 +39,8 @@ in
     ".gitconfig".source = link "git/gitconfig";
     "Library/Application Support/com.mitchellh.ghostty/config.ghostty".source =
       link "ghostty/config.ghostty";
+    ".pi/agent/settings.json".source = link "pi/settings.json";
+    ".pi/agent/custom-provider.json".source = link "pi/custom-provider.json";
   };
 
   # AACSキーDB導入, 日次更新でfetchurl不可

@@ -1,0 +1,19 @@
+{
+  "packages": [
+    "npm:pi-cc-extensions@0.9.9",
+    "npm:@indexyz/pi-custom-provider@0.1.29",
+    {
+      "source": "npm:pi-code@1.4.1",
+      "extensions": [
+        "!extensions/skills.ts"
+      ]
+    }
+  ],
+  "theme": "cc-dark",
+  "lastChangelogVersion": "0.99.1",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-4-8",
+  "skills": [
+    "!**/synced/*/stop-ai-slop-jp"
+  ]
+}

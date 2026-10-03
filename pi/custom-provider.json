@@ -1,0 +1,14 @@
+{
+  "providers": {
+    "codex-lb": {
+      "baseURL": "https://codex.nq2.day/v1",
+      "apiKey": "$CODEX_LB_API_KEY",
+      "api": "openai-responses"
+    },
+    "mlx-serve": {
+      "baseURL": "http://127.0.0.1:11234/v1",
+      "apiKey": "local",
+      "api": "openai-completions"
+    }
+  }
+}

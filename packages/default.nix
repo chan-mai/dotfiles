@@ -32,6 +32,7 @@
     opencode
     osv-scanner
     oxipng
+    pi-coding-agent
     pnpm
     poppler-utils
     postgresql
