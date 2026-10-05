@@ -1,7 +1,7 @@
 [user]
 	name = mq1
 	email = chan-mai@mq1.dev
-	signingkey = /Users/mq1/.ssh/id_ed25519.pub
+	signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHwTTRBQBwp3Vg7eRRJ6U2ICw93TXTPWIpt8gUPZm6mi
 [gpg]
 	format = ssh
 [commit]

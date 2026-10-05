@@ -54,7 +54,6 @@
     }))
     zsh-autosuggestions
     # GUI
-    bitwarden-desktop
     dbeaver-bin
     google-chrome
     vscode

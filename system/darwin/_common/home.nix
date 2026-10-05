@@ -14,8 +14,7 @@ in
   home.stateVersion = "26.11";
 
   home.sessionVariables = {
-    # Bitwarden SSHエージェント
-    SSH_AUTH_SOCK = "$HOME/.bitwarden-ssh-agent.sock";
+    SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
     PNPM_HOME = "$HOME/Library/pnpm";
     # nixストアは書き込み不可, npmグローバルは専用ディレクトリ
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
@@ -28,6 +27,9 @@ in
   ];
 
   home.file = {
+    # 1Password SSHエージェント, 空白なしパス
+    ".1password/agent.sock".source = config.lib.file.mkOutOfStoreSymlink
+      "/Users/mq1/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     # skills実体
     ".claude/skills".source = config.lib.file.mkOutOfStoreSymlink "/Users/mq1/.agents/skills";
     # 共通指示, opencode側はAGENTS.mdとして参照
