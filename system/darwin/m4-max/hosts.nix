@@ -6,5 +6,6 @@
   # ホスト固有パッケージ
   environment.systemPackages = [
     (pkgs.callPackage ../../../packages/mlx-serve { })
+    pkgs.zed-editor
   ];
 }
