@@ -25,6 +25,12 @@ tasks:
     cmds:
       - sudo darwin-rebuild switch --flake "$HOME/dotfiles/system/darwin#{{.HOSTNAME}}"
 
+  update:
+    desc: "Update flake.lock and apply"
+    cmds:
+      - nix flake update --flake "$HOME/dotfiles/system/darwin"
+      - task: apply
+
   apply:update:
     desc: "Update flake.lock, apply, and push"
     cmds:
