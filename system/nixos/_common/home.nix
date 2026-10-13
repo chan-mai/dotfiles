@@ -334,13 +334,31 @@ in
         border: 2px solid #${c.overlay};
         border-radius: 12px;
         margin: 8px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 25%;
       }
       button:focus,
       button:hover {
         background-color: #${c.pine};
         border-color: #${c.love};
       }
-    '';
+    ''
+    # 既定style.cssのアイコン指定を再定義
+    + pkgs.lib.concatMapStrings
+      (n: ''
+        #${n} {
+          background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/${n}.png"));
+        }
+      '')
+      [
+        "lock"
+        "logout"
+        "suspend"
+        "hibernate"
+        "shutdown"
+        "reboot"
+      ];
   };
 }
 
