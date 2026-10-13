@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS(nix-darwin + home-manager)の設定レポジトリ
+nix-darwin + home-managerの設定レポジトリ
 
 ## 構成
 
@@ -8,7 +8,8 @@ macOS(nix-darwin + home-manager)の設定レポジトリ
 ghostty/          Ghostty設定
 git/              git設定(gitconfig, ignore)
 zsh/              zsh設定(zshrc, zshenv, zprofile)
-packages/         インストールするパッケージ・フォント一覧
+modules/          パッケージ・フォント一覧(common.nix: 全OS共通, darwin.nix: macOS共通)
+packages/         自作derivation(overlay)
 system/darwin/    nix-darwin flake
   _common/        全ホスト共通設定(darwin.nix, home.nix)
   m4-max/         ホスト固有設定

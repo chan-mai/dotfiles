@@ -3,17 +3,7 @@
 {
   # terraform用(BUSL)
   nixpkgs.config.allowUnfree = true;
-
-  # darwin固有パッケージ
-  environment.systemPackages = with pkgs; [
-    (pkgs.callPackage ../../../packages/coderabbit-cli { })
-    # GUI
-    ghostty-bin
-    maccy
-    scroll-reverser
-    slack
-    (pkgs.callPackage ../../../packages/vlc { })
-  ];
+  nixpkgs.overlays = [ (import ../../../packages) ];
 
   # /Applications配置必須
   programs._1password-gui.enable = true;

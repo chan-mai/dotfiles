@@ -1,0 +1,69 @@
+{ pkgs, ... }:
+
+{
+  environment.systemPackages = with pkgs; [
+    age
+    ansible
+    argocd
+    awscli2
+    btop
+    claude-code
+    cmake
+    dotslash
+    fastfetch
+    ffmpeg
+    gh
+    go
+    go-task
+    (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
+      beta
+      config-connector
+    ]))
+    herdr
+    just
+    k3d
+    kubectl
+    kubelogin-oidc
+    kubernetes-helm
+    kustomize
+    mkcert
+    mysql84
+    nodejs_24
+    opencode
+    osv-scanner
+    oxipng
+    pi-coding-agent
+    pnpm
+    poppler-utils
+    postgresql
+    prettier
+    python3
+    rdap
+    ripgrep
+    rustup
+    sops
+    sshpass
+    ssm-session-manager-plugin
+    terraform
+    uv
+    wasm-pack
+    wrangler
+    # curl-cffi 0.15はdarwinビルド不可, unstable到達後に除外解除
+    (yt-dlp.overridePythonAttrs (old: {
+      dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
+    }))
+    zsh-autosuggestions
+    # GUI
+    dbeaver-bin
+    google-chrome
+    vscode
+    wireshark
+  ];
+
+  fonts.packages = with pkgs; [
+    fira-code
+    nerd-fonts.blex-mono
+    noto-fonts-cjk-sans
+    source-han-code-jp
+  ];
+}

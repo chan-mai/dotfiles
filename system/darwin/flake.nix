@@ -16,7 +16,8 @@
   outputs = { self, nixpkgs, nix-darwin, home-manager }: {
     darwinConfigurations."M4-Max" = nix-darwin.lib.darwinSystem {
       modules = [
-        ../../packages
+        ../../modules/common.nix
+        ../../modules/darwin.nix
         ./_common/darwin.nix
         ./m4-max/hosts.nix
         home-manager.darwinModules.home-manager
