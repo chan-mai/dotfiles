@@ -3,6 +3,12 @@ local map = vim.keymap.set
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+local ok, catppuccin = pcall(require, "catppuccin")
+if ok then
+  catppuccin.setup({ flavour = "mocha", auto_integrations = true })
+  vim.cmd.colorscheme("catppuccin")
+end
+
 vim.opt.number = true
 vim.opt.signcolumn = "yes"
 vim.opt.mouse = "a"

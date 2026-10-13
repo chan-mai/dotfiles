@@ -73,6 +73,7 @@ in
     withRuby = false;
     withPython3 = false;
     plugins = with pkgs.vimPlugins; [
+      catppuccin-nvim
       diffview-plus
       gitsigns-nvim
       nvim-lspconfig
