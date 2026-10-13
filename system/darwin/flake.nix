@@ -11,9 +11,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agents-nix = {
+      url = "github:sudosubin/agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager }: {
+  outputs = { self, nixpkgs, nix-darwin, home-manager, agents-nix }: {
     darwinConfigurations."M4-Max" = nix-darwin.lib.darwinSystem {
       modules = [
         ../../modules/common.nix
@@ -25,6 +29,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "before-home-manager";
+          home-manager.extraSpecialArgs = { inherit agents-nix; };
           home-manager.users.mq1 = import ./_common/home.nix;
         }
       ];

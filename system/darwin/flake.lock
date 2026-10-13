@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "agents-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791893809,
+        "narHash": "sha256-N4II2run9w+8iUSv9cvBZm4FA3Dyx3MN4iIh4ES7bUA=",
+        "owner": "sudosubin",
+        "repo": "agents.nix",
+        "rev": "432c1f79c98bef80f70ccc5d752bd4435294397d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sudosubin",
+        "repo": "agents.nix",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -59,6 +79,7 @@
     },
     "root": {
       "inputs": {
+        "agents-nix": "agents-nix",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs"

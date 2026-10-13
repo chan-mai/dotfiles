@@ -80,7 +80,8 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "karpathy-skills": {
