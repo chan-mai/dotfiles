@@ -40,6 +40,22 @@
         "type": "github"
       }
     },
+    "dotfiles-assets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791913528,
+        "narHash": "sha256-w65XzS1vwejO2roHsB0YR4nBxOoe3kLzO5IxL0+qkSc=",
+        "owner": "chan-mai",
+        "repo": "dotfiles-assets",
+        "rev": "4e59c2dba6cfe1e2a342cebb3332bdc37032e994",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chan-mai",
+        "repo": "dotfiles-assets",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -80,6 +96,7 @@
       "inputs": {
         "agents-nix": "agents-nix",
         "disko": "disko",
+        "dotfiles-assets": "dotfiles-assets",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }

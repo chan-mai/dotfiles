@@ -9,6 +9,9 @@ vars:
     sh: scutil --get LocalHostName 2>/dev/null || hostname
   FLAKE: "$HOME/dotfiles/system/{{.SYSTEM}}"
 
+  NIX_GH_OPT:
+    sh: t=$(gh auth token 2>/dev/null) && echo "--option access-tokens github.com=$t" || true
+
 tasks:
   default:
     cmds:
@@ -27,18 +30,18 @@ tasks:
   apply:
     desc: "Apply nix-darwin / NixOS configuration"
     cmds:
-      - sudo {{.SYSTEM}}-rebuild switch --flake "{{.FLAKE}}#{{.HOSTNAME}}"
+      - sudo {{.SYSTEM}}-rebuild switch --flake "{{.FLAKE}}#{{.HOSTNAME}}" {{.NIX_GH_OPT}}
 
   update:
     desc: "Update flake.lock and apply"
     cmds:
-      - nix flake update --flake "{{.FLAKE}}"
+      - nix flake update --flake "{{.FLAKE}}" {{.NIX_GH_OPT}}
       - task: apply
 
   apply:update:
     desc: "Update flake.lock, apply, and push"
     cmds:
-      - nix flake update --flake "{{.FLAKE}}"
+      - nix flake update --flake "{{.FLAKE}}" {{.NIX_GH_OPT}}
       - task: apply
       - task: push-flake-lock
 

@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  dotfiles-assets,
   ...
 }:
 
@@ -43,7 +44,6 @@ in
     cliphist
     grimblast
     playerctl
-    rose-pine-hyprcursor
   ];
 
   # 外観
@@ -68,9 +68,11 @@ in
   };
   home.pointerCursor = {
     enable = true;
-    name = "BreezeX-RosePine-Linux";
-    package = pkgs.rose-pine-cursor;
-    size = 24;
+    name = "Hachiware";
+    package = pkgs.callPackage ../../../packages/hachiware-cursor {
+      src = "${dotfiles-assets}/hachiware-cursor.zip";
+    };
+    size = 32;
     gtk.enable = true;
   };
 

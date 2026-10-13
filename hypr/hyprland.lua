@@ -14,8 +14,8 @@ local run = "uwsm app -- "
 
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 
-hl.env("HYPRCURSOR_THEME", "rose-pine-hyprcursor")
-hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("XCURSOR_THEME", "Hachiware")
+hl.env("XCURSOR_SIZE", "32")
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("wl-paste --watch cliphist store")

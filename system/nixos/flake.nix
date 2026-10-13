@@ -11,13 +11,17 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dotfiles-assets = {
+      url = "github:chan-mai/dotfiles-assets";
+      flake = false;
+    };
     agents-nix = {
       url = "github:sudosubin/agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, disko, agents-nix }: {
+  outputs = { self, nixpkgs, home-manager, disko, dotfiles-assets, agents-nix }: {
     nixosConfigurations.kumo = nixpkgs.lib.nixosSystem {
       modules = [
         ../../modules/common.nix
@@ -32,7 +36,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "before-home-manager";
-          home-manager.extraSpecialArgs = { inherit agents-nix; };
+          home-manager.extraSpecialArgs = { inherit agents-nix dotfiles-assets; };
           home-manager.users.mq1 = import ./_common/home.nix;
         }
       ];
