@@ -7,13 +7,17 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     agents-nix = {
       url = "github:sudosubin/agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, agents-nix }: {
+  outputs = { self, nixpkgs, home-manager, disko, agents-nix }: {
     nixosConfigurations.kumo = nixpkgs.lib.nixosSystem {
       modules = [
         ../../modules/common.nix
@@ -21,6 +25,8 @@
         ./_common/desktop.nix
         ./kumo/hosts.nix
         ./kumo/hardware-configuration.nix
+        disko.nixosModules.disko
+        ./kumo/disko.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

@@ -21,6 +21,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  zramSwap.enable = true;
+
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Tokyo";

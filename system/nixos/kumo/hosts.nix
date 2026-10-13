@@ -3,6 +3,8 @@
 {
   networking.hostName = "kumo";
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # RTX 5070, Blackwellだとopenカーネルモジュール必須らしい？
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
