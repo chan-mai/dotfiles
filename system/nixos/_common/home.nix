@@ -43,6 +43,7 @@ in
   home.packages = with pkgs; [
     cliphist
     grimblast
+    nwg-dock-hyprland
     playerctl
   ];
 
@@ -360,5 +361,37 @@ in
         "reboot"
       ];
   };
+
+  xdg.configFile."nwg-dock-hyprland/style.css".text = ''
+    window {
+      background-color: rgba(25, 23, 36, 0.9);
+      border: 2px solid #${c.love};
+      border-radius: 12px;
+    }
+    #box {
+      padding: 8px;
+    }
+    #active {
+      border-bottom: 2px solid #${c.foam};
+    }
+    button,
+    image {
+      background: none;
+      border-style: none;
+      box-shadow: none;
+    }
+    button {
+      color: #${c.text};
+      padding: 4px;
+      margin: 0 4px;
+      border-radius: 8px;
+    }
+    button:hover {
+      background-color: #${c.pine};
+    }
+    button:focus {
+      box-shadow: none;
+    }
+  '';
 }
 

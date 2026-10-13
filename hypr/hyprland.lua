@@ -19,6 +19,7 @@ hl.env("XCURSOR_SIZE", "32")
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("wl-paste --watch cliphist store")
+  hl.exec_cmd("nwg-dock-hyprland -d -f -ml 8 -mr 8 -i 34 -nolauncher")
 end)
 
 hl.config({
