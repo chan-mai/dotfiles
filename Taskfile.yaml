@@ -2,6 +2,13 @@ version: "3"
 
 silent: true
 
+vars:
+  SYSTEM:
+    sh: '[ "$(uname)" = Darwin ] && echo darwin || echo nixos'
+  HOSTNAME:
+    sh: scutil --get LocalHostName 2>/dev/null || hostname
+  FLAKE: "$HOME/dotfiles/system/{{.SYSTEM}}"
+
 tasks:
   default:
     cmds:
@@ -18,23 +25,20 @@ tasks:
       - code ~/dotfiles
 
   apply:
-    desc: "Apply nix-darwin configuration"
-    vars:
-      HOSTNAME:
-        sh: scutil --get LocalHostName
+    desc: "Apply nix-darwin / NixOS configuration"
     cmds:
-      - sudo darwin-rebuild switch --flake "$HOME/dotfiles/system/darwin#{{.HOSTNAME}}"
+      - sudo {{.SYSTEM}}-rebuild switch --flake "{{.FLAKE}}#{{.HOSTNAME}}"
 
   update:
     desc: "Update flake.lock and apply"
     cmds:
-      - nix flake update --flake "$HOME/dotfiles/system/darwin"
+      - nix flake update --flake "{{.FLAKE}}"
       - task: apply
 
   apply:update:
     desc: "Update flake.lock, apply, and push"
     cmds:
-      - nix flake update --flake "$HOME/dotfiles/system/darwin"
+      - nix flake update --flake "{{.FLAKE}}"
       - task: apply
       - task: push-flake-lock
 
@@ -44,11 +48,11 @@ tasks:
     dir: "{{.ROOT_DIR}}"
     cmds:
       - |
-        LOCKFILE="system/darwin/flake.lock"
+        LOCKFILE="system/{{.SYSTEM}}/flake.lock"
         if [ -z "$(git status --porcelain -- "$LOCKFILE")" ]; then
           echo "flake.lock is up to date, nothing to push"
           exit 0
         fi
         git add "$LOCKFILE"
-        git commit -m "chore(deps): update darwin flake.lock"
+        git commit -m "chore(deps): update {{.SYSTEM}} flake.lock"
         git push origin HEAD

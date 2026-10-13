@@ -1,6 +1,8 @@
+import { homedir } from "node:os";
+import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
-const SNAPSHOT = "/Users/mq1/dotfiles/agents/hooks/review-snapshot.sh";
+const SNAPSHOT = join(homedir(), "dotfiles/agents/hooks/review-snapshot.sh");
 // index変更系gitサブコマンド
 const INDEX_WRITE =
   /\bgit\s+(?:-C\s+\S+\s+)?(?:add|commit|restore|stash|reset|checkout|switch|rm|mv|apply|update-index|read-tree|merge|rebase|cherry-pick|revert|pull)\b/;

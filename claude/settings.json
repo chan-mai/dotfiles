@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 '/Users/mq1/dotfiles/agents/hooks/check-style.py'",
+            "command": "python3 \"$HOME/dotfiles/agents/hooks/check-style.py\"",
             "timeout": 60
           }
         ]
@@ -53,12 +53,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/mq1/dotfiles/agents/hooks/review-snapshot.sh'",
+            "command": "bash \"$HOME/dotfiles/agents/hooks/review-snapshot.sh\"",
             "timeout": 10
           },
           {
             "type": "command",
-            "command": "python3 '/Users/mq1/dotfiles/agents/hooks/herdr-auto-title.py'",
+            "command": "python3 \"$HOME/dotfiles/agents/hooks/herdr-auto-title.py\"",
             "timeout": 10
           }
         ]
@@ -70,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/Users/mq1/dotfiles/agents/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$HOME/dotfiles/agents/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           }
         ]
