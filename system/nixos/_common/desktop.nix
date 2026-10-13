@@ -23,4 +23,6 @@
     kdePackages.dolphin
     pavucontrol
   ];
+
+  fonts.packages = [ pkgs.lucide ];
 }

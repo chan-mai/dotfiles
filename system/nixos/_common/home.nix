@@ -32,6 +32,10 @@ let
     foam = "9ccfd8";
     iris = "c4a7e7";
   };
+
+  # 私用領域文字はエスケープから生成
+  lucide = code: builtins.fromJSON "\"\\u${code}\"";
+  icon = code: "<span font=\"lucide\">${lucide code}</span>";
 in
 {
   imports = [ ../../../modules/home.nix ];
@@ -118,29 +122,30 @@ in
       ];
       "hyprland/window".max-length = 40;
       clock = {
-        format = "  {:%H:%M}";
-        format-alt = "  {:%Y-%m-%d}";
+        format = "${icon "e087"}  {:%H:%M}";
+        format-alt = "${icon "e063"}  {:%Y-%m-%d}";
       };
-      cpu.format = "  {usage}%";
-      memory.format = "  {percentage}%";
+      cpu.format = "${icon "e0a9"}  {usage}%";
+      memory.format = "${icon "e445"}  {percentage}%";
       "custom/gpu" = {
-        exec = "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits | awk -F', ' '{print \"󰢮  \"$1\"% \"$2\"°C\"}'";
+        exec = "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits | awk -F', ' '{print $1\"% \"$2\"°C\"}'";
+        format = "${icon "e66a"}  {}";
         interval = 5;
       };
       pulseaudio = {
         format = "{icon}  {volume}%";
-        format-muted = "󰝟  muted";
+        format-muted = "${icon "e1ac"}  muted";
         format-icons.default = [
-          ""
-          ""
-          ""
+          (icon "e1a9")
+          (icon "e1aa")
+          (icon "e1ab")
         ];
         on-click = "pavucontrol";
       };
       network = {
-        format-wifi = "  {essid}";
-        format-ethernet = "󰈀  {ipaddr}";
-        format-disconnected = "󰖪  offline";
+        format-wifi = "${icon "e1ae"}  {essid}";
+        format-ethernet = "${icon "e620"}  {ipaddr}";
+        format-disconnected = "${icon "e1af"}  offline";
       };
       tray.spacing = 8;
     };
@@ -191,8 +196,8 @@ in
       font = "BlexMono Nerd Font 12";
       show-icons = true;
       icon-theme = "Tela-circle-pink";
-      display-drun = " ";
-      display-window = " ";
+      display-drun = "${lucide "e151"} ";
+      display-window = "${lucide "e426"} ";
     };
     theme =
       let
