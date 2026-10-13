@@ -15,19 +15,6 @@ let
     url = "${klpod0s}/configs/.config/swww/Material-Sakura/material_pastel_4.jpg";
     hash = "sha256-yNWNLlZMkBD/UwDmLLh4Q0v8lC9DgRNoQWwmfCuEQAY=";
   };
-  rose-pine-gtk = pkgs.stdenvNoCC.mkDerivation {
-    pname = "rose-pine-gtk-klpod0s";
-    version = "0-unstable-2023-12-16";
-    src = pkgs.fetchurl {
-      url = "${klpod0s}/source/arcs/Gtk_RosePine.tar.gz";
-      hash = "sha256-dRS6gfEYFwKbBh60IecuArRq/8NuFIVv3AUCnZvnOWQ=";
-    };
-    sourceRoot = ".";
-    installPhase = ''
-      mkdir -p $out/share/themes
-      cp -r Rose-Pine $out/share/themes/
-    '';
-  };
 
   # 配色
   c = {
@@ -63,15 +50,18 @@ in
   gtk = {
     enable = true;
     theme = {
-      name = "Rose-Pine";
-      package = rose-pine-gtk;
+      name = "adw-gtk3";
+      package = pkgs.adw-gtk3;
+    };
+    font = {
+      name = "Noto Sans CJK JP";
+      size = 10;
     };
     iconTheme = {
       name = "Tela-circle-pink";
       package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "pink" ]; };
     };
   };
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   qt = {
     enable = true;
     platformTheme.name = "gtk3";

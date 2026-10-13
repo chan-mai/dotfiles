@@ -26,7 +26,11 @@
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Tokyo";
-  i18n.defaultLocale = "ja_JP.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8"
+    "ja_JP.UTF-8/UTF-8"
+  ];
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
