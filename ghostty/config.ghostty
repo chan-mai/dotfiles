@@ -8,12 +8,17 @@ font-family = monospace
 font-size = 14
 
 theme = Rose Pine Moon
+macos-icon = blueprint
 
 # タイピング中にマウスカーソルを隠す
 mouse-hide-while-typing = true
-# ウィンドウ枠/タイトルバー等の装飾を表示
+
+scrollback-limit = 100000
+
+# シェル統合
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
 
 window-decoration = true
 cursor-color = FF88FF
 cursor-style-blink = true
-
