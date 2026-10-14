@@ -40,6 +40,7 @@
     mangohud
     nvtopPackages.nvidia
     prismlauncher
+    winboat
     # VRC関連
     alcom
     unityhub
