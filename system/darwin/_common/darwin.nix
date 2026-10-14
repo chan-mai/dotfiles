@@ -7,6 +7,7 @@
 
   # /Applications配置必須
   programs._1password-gui.enable = true;
+  programs._1password.enable = true;
 
   users.users.mq1.home = "/Users/mq1";
   # system.defaultsの書き込み先ユーザー

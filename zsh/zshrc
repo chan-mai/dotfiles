@@ -2,4 +2,5 @@
 [ -f /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh ] && . /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh
 
 source "$HOME/dotfiles/zsh/tools/dotfiles.zsh"
+source "$HOME/dotfiles/zsh/tools/pi.zsh"
 [ -f "$HOME/.secrets.zsh" ] && source "$HOME/.secrets.zsh"
