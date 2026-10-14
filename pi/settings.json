@@ -10,7 +10,7 @@
     }
   ],
   "theme": "cc-dark",
-  "lastChangelogVersion": "0.99.1",
+  "lastChangelogVersion": "1.1.0",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-4-8",
   "skills": [
