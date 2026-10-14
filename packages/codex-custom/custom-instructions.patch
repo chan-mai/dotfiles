@@ -1,0 +1,38 @@
+diff --git a/models-manager/src/model_info.rs b/models-manager/src/model_info.rs
+index 88ade7c..cbdaeba 100644
+--- a/models-manager/src/model_info.rs
++++ b/models-manager/src/model_info.rs
+@@ -10,6 +10,7 @@ use codex_protocol::openai_models::WebSearchToolType;
+ use codex_protocol::openai_models::default_input_modalities;
+ 
+ use crate::config::ModelsManagerConfig;
++use chrono::Local;
+ use codex_utils_output_truncation::approx_bytes_for_tokens;
+ use tracing::warn;
+ 
+@@ -55,10 +56,25 @@ pub fn with_config_overrides(mut model: ModelInfo, config: &ModelsManagerConfig)
+     {
+         *instructions_template = strip_personality_section(std::mem::take(instructions_template));
+     }
++    if config.base_instructions.is_none() {
++        apply_custom_instructions(&mut model);
++    }
+ 
+     model
+ }
+ 
++fn apply_custom_instructions(model: &mut ModelInfo) {
++    let instructions = BASE_INSTRUCTIONS
++        .replace("{{ model_display_name }}", &model.display_name)
++        .replace(
++            "{{ current_date }}",
++            &Local::now().format("%A, %B %-d, %Y").to_string(),
++        );
++    let messages = model.model_messages.get_or_insert_default();
++    messages.instructions_template = Some(instructions);
++    messages.instructions_variables = None;
++}
++
+ fn strip_personality_section(mut instructions: String) -> String {
+     let mut section_start = None;
+     let mut section_end = None;

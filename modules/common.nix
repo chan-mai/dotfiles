@@ -8,6 +8,7 @@
     awscli2
     btop
     claude-code
+    codex-custom
     cmake
     dotslash
     fastfetch
