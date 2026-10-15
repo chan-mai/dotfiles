@@ -10,7 +10,7 @@ index 88ade7c..cbdaeba 100644
  use codex_utils_output_truncation::approx_bytes_for_tokens;
  use tracing::warn;
  
-@@ -55,10 +56,25 @@ pub fn with_config_overrides(mut model: ModelInfo, config: &ModelsManagerConfig)
+@@ -55,10 +56,24 @@ pub fn with_config_overrides(mut model: ModelInfo, config: &ModelsManagerConfig)
      {
          *instructions_template = strip_personality_section(std::mem::take(instructions_template));
      }
@@ -30,7 +30,6 @@ index 88ade7c..cbdaeba 100644
 +        );
 +    let messages = model.model_messages.get_or_insert_default();
 +    messages.instructions_template = Some(instructions);
-+    messages.instructions_variables = None;
 +}
 +
  fn strip_personality_section(mut instructions: String) -> String {
