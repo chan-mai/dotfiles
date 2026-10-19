@@ -178,7 +178,13 @@ in
 
     configFile.kscreenlockerrc."Greeter/Wallpaper/org.kde.image/General".Image = "${wallpaper}";
 
-    powerdevil.AC.autoSuspend.action = "nothing";
+    kscreenlocker.autoLock = false;
+
+    powerdevil.AC = {
+      autoSuspend.action = "nothing";
+      turnOffDisplay.idleTimeout = "never";
+      dimDisplay.enable = false;
+    };
 
     # Hyprlandのボーダー再現(KDE Rounded Corners)
     configFile.kwinrc = {
