@@ -4,6 +4,8 @@
   networking.hostName = "kumo";
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Apple VIDのCX製キーボード, F1-F12優先
+  boot.extraModprobeConfig = "options hid_apple fnmode=2";
 
   # RTX 5070, Blackwellだとopenカーネルモジュール必須らしい？
   services.xserver.videoDrivers = [ "nvidia" ];

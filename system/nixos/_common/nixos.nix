@@ -70,6 +70,13 @@
     enable = true;
     # ブラウザ連携, システム認証
     polkitPolicyOwners = [ "mq1" ];
+    # スケール1未満のクリック位置ずれ回避(crbug 438038776)
+    package = pkgs._1password-gui.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+      postFixup = (old.postFixup or "") + ''
+        wrapProgram $out/bin/1password --add-flags "--disable-features=WaylandFractionalScaleV1"
+      '';
+    });
   };
 
   environment.systemPackages = with pkgs; [

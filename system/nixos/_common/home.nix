@@ -38,7 +38,10 @@ let
   icon = code: "<span font=\"lucide\">${lucide code}</span>";
 in
 {
-  imports = [ ../../../modules/home.nix ];
+  imports = [
+    ../../../modules/home.nix
+    ./plasma.nix
+  ];
 
   home.stateVersion = "26.11";
 
@@ -66,10 +69,12 @@ in
       name = "Tela-circle-pink";
       package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "pink" ]; };
     };
+    # Plasmaの書き換え対策
+    gtk2.force = true;
   };
   qt = {
     enable = true;
-    platformTheme.name = "gtk3";
+    platformTheme.name = "kde";
   };
   home.pointerCursor = {
     enable = true;

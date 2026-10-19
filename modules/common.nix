@@ -57,7 +57,10 @@
     # GUI
     dbeaver-bin
     google-chrome
-    vscode
+    # スケール1未満のクリック位置ずれ回避(crbug 438038776)
+    (vscode.override {
+      commandLineArgs = lib.optionalString stdenv.hostPlatform.isLinux "--disable-features=WaylandFractionalScaleV1";
+    })
     wireshark
   ];
 

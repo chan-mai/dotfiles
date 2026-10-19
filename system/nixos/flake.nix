@@ -19,9 +19,14 @@
       url = "github:sudosubin/agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, disko, dotfiles-assets, agents-nix }: {
+  outputs = { self, nixpkgs, home-manager, disko, dotfiles-assets, agents-nix, plasma-manager }: {
     nixosConfigurations.kumo = nixpkgs.lib.nixosSystem {
       modules = [
         ../../modules/common.nix
@@ -37,6 +42,7 @@
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "before-home-manager";
           home-manager.extraSpecialArgs = { inherit agents-nix dotfiles-assets; };
+          home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
           home-manager.users.mq1 = import ./_common/home.nix;
         }
       ];

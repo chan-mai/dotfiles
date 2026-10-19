@@ -12,7 +12,7 @@ local mod = "SUPER"
 -- UWSM管理下で起動
 local run = "uwsm app -- "
 
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+hl.monitor({ output = "", mode = "1920x1080@180", position = "auto", scale = "auto" })
 
 hl.env("XCURSOR_THEME", "Hachiware")
 hl.env("XCURSOR_SIZE", "32")
