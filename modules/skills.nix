@@ -64,6 +64,7 @@ let
       inherit (github.vercel-labs.skills) find-skills;
       inherit (github.nanaism.yomiyasu) yomiyasu;
       inherit (github.ikora128.stop-ai-slop-jp) stop-ai-slop-jp;
+      inherit (github.marycache.imozuru) imozuru;
     };
 in
 {
