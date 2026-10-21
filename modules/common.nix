@@ -29,7 +29,7 @@
     kustomize
     mkcert
     mysql84
-    nodejs_24
+    nodejs_26
     opencode
     osv-scanner
     oxipng
