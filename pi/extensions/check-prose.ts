@@ -55,10 +55,17 @@ export default function (pi: ExtensionAPI) {
         for (const c of m.content) {
           if (c?.type === "text")
             messages.push({ role: "assistant", text: c.text });
-          else if (c?.type === "toolCall") messages.push({ role: "tool" });
+          else if (c?.type === "toolCall")
+            messages.push({
+              role: "tool",
+              text: `${c.name}: ${JSON.stringify(c.arguments ?? {})}`.slice(0, 300),
+            });
         }
       } else if (m.role === "toolResult") {
-        messages.push({ role: "tool" });
+        messages.push({
+          role: "tool",
+          text: `結果: ${textOf(m.content)}`.slice(0, 300),
+        });
       }
     }
     const result = await check({

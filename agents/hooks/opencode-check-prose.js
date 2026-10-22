@@ -29,7 +29,13 @@ const toMessages = (rows) => {
   for (const { info, parts } of rows) {
     for (const part of parts) {
       if (part.type === "tool") {
-        messages.push({ role: "tool" });
+        const { input, output } = part.state ?? {};
+        messages.push({
+          role: "tool",
+          text: `${part.tool}: ${JSON.stringify(input ?? {})}`.slice(0, 300),
+        });
+        if (output)
+          messages.push({ role: "tool", text: `結果: ${output}`.slice(0, 300) });
       } else if (part.type === "text" && !part.synthetic && !part.ignored) {
         const role =
           info.role === "user" && part.text.startsWith(MARKER)

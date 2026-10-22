@@ -7,6 +7,7 @@
 2. GiNZAによる禁止語と係り受けの検査(ja-prose-python実行時のみ)
 3. textlint(preset-ja-technical-writing, preset-ai-words-ja, 設定は../textlint)
 4. Sonnetによる文脈欠落の査読(規則はcheck-prose.md)
+5. Haikuによる確認省略の判定(規則はcheck-verify.md, 最後のユーザ発言以降のツール呼び出しを参照)
 違反は最終応答を書き直させる(差し戻し6回超過分はユーザへ表示)
 検査済みの最終応答と差し戻し回数はセッション単位で記録
 
@@ -27,9 +28,11 @@ import subprocess
 import sys
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RUBRIC = os.path.join(HERE, 'check-prose.md')
+VERIFY_RUBRIC = os.path.join(HERE, 'check-verify.md')
 TEXTLINTRC = os.path.join(HERE, '..', 'textlint', 'textlintrc.json')
 LOG = os.path.expanduser('~/.cache/check-prose/log.jsonl')
 LOG_MAX = 20 * 1024 * 1024
@@ -43,8 +46,11 @@ MAX_RETRY = 6
 # 査読対象とする日本語の最小文字数
 MIN_JP_LLM = 1
 MODEL = os.environ.get('CHECK_PROSE_MODEL', 'sonnet')
+VERIFY_MODEL = os.environ.get('CHECK_PROSE_VERIFY_MODEL', 'haiku')
 LLM_TIMEOUT = 150
 CONTEXT_CHARS = 12000
+VERIFY_CHARS = 16000
+TOOL_CHARS = 300
 
 JP = re.compile(r'[ぁ-んァ-ヶ一-龠]')
 
@@ -139,6 +145,20 @@ def _is_tool_result(content):
 	return isinstance(content, list) and any(isinstance(b, dict) and b.get('type') == 'tool_result' for b in content)
 
 
+def _clip(text):
+	text = re.sub(r'\s+', ' ', text if isinstance(text, str) else json.dumps(text, ensure_ascii=False)).strip()
+	return text[:TOOL_CHARS] + ('...' if len(text) > TOOL_CHARS else '')
+
+
+def _tool_results(content):
+	out = []
+	for b in content:
+		if isinstance(b, dict) and b.get('type') == 'tool_result':
+			body = b.get('content')
+			out.append('結果: ' + _clip(_text_of(body) if isinstance(body, list) else body or ''))
+	return '\n'.join(out)
+
+
 def _codex_event(d):
 	"""Codexのrollout行, 対象外はNone"""
 	if d.get('type') != 'response_item':
@@ -146,7 +166,11 @@ def _codex_event(d):
 	p = d.get('payload') or {}
 	t = p.get('type')
 	if t in ('function_call', 'custom_tool_call', 'local_shell_call', 'tool_search_call', 'web_search_call'):
-		return ('tool', '')
+		return ('tool', f'{p.get("name") or t}: ' + _clip(p.get('arguments') or p.get('input') or p.get('action') or ''))
+	if t in ('function_call_output', 'custom_tool_call_output'):
+		out = p.get('output')
+		out = out.get('content', out) if isinstance(out, dict) else out
+		return ('tool', '結果: ' + _clip('\n'.join(c.get('text', '') for c in out if isinstance(c, dict)) if isinstance(out, list) else out or ''))
 	if t != 'message' or p.get('role') not in ('user', 'assistant'):
 		return None
 	text = '\n'.join(c.get('text', '') for c in p.get('content') or [] if isinstance(c, dict) and c.get('type') in ('input_text', 'output_text')).strip()
@@ -183,14 +207,14 @@ def read_transcript(path):
 			content = msg.get('content')
 			if t == 'user':
 				if _is_tool_result(content):
-					events.append(('tool', ''))
+					events.append(('tool', _tool_results(content)))
 					continue
 				text = _text_of(content)
 				if d.get('isMeta'):
 					if text.startswith('Stop hook feedback:'):
 						events.append(('feedback', text))
 					continue
-				if text.lstrip().startswith(('<local-command', '<command-name>', '<task-notification>')):
+				if text.lstrip().startswith(('<local-command', '<command-name>', '<task-notification>', '[Request interrupted by user')):
 					continue
 				text = re.sub(r'<system-reminder>.*?</system-reminder>', '', text, flags=re.S).strip()
 				query = re.search(r'<user_query>(.*?)</user_query>', text, flags=re.S)
@@ -206,7 +230,7 @@ def read_transcript(path):
 					if not isinstance(b, dict):
 						continue
 					if b.get('type') == 'tool_use':
-						events.append(('tool', ''))
+						events.append(('tool', f'{b.get("name")}: ' + _clip(b.get('input') or '')))
 					elif b.get('type') == 'text' and b.get('text', '').strip():
 						key = (msg.get('id'), b['text'])
 						if key in seen:
@@ -224,7 +248,7 @@ def read_messages(messages):
 			continue
 		role, text = m.get('role'), (m.get('text') or '').strip()
 		if role == 'tool':
-			events.append(('tool', ''))
+			events.append(('tool', text))
 		elif role in ('user', 'assistant', 'feedback') and text:
 			events.append((role, text))
 	return events
@@ -256,6 +280,21 @@ def split_final(events, last=None):
 		ctx.append(chunk)
 		size += len(chunk)
 	return final, turn, '\n\n'.join(reversed(ctx))
+
+
+def turn_log(events):
+	"""最後のユーザ発言以降の発言, ツール呼び出し, 差し戻し"""
+	last_user = max((i for i, e in enumerate(events) if e[0] == 'user'), default=0)
+	labels = {'user': 'ユーザ', 'assistant': 'エージェント', 'tool': 'ツール', 'feedback': '差し戻し'}
+	rows, size = [], 0
+	for kind, text in reversed(events[last_user:]):
+		chunk = f'[{labels[kind]}] {text[-2000:]}'
+		if size + len(chunk) > VERIFY_CHARS:
+			rows.append('[以前の記録は省略]')
+			break
+		rows.append(chunk)
+		size += len(chunk)
+	return '\n'.join(reversed(rows))
 
 
 # ---- 前処理 ----
@@ -548,27 +587,33 @@ def strip_fences(text):
 	return '\n'.join(out)
 
 
-def llm_review(target, context, found):
+VERIFY_SCHEMA = {
+	'type': 'object',
+	'properties': {
+		'ok': {'type': 'boolean'},
+		'reason': {'type': 'string'},
+		'impossible': {'type': 'boolean'},
+	},
+	'required': ['ok', 'reason', 'impossible'],
+}
+
+
+def run_claude(model, rubric, prompt, schema, effort=None):
+	"""structured_outputとエラーの組"""
 	claude = shutil.which('claude') or os.path.expanduser('~/.local/bin/claude')
 	if not os.path.exists(claude):
 		return None, 'claude not found'
 	try:
-		with open(RUBRIC, encoding='utf-8') as fh:
+		with open(rubric, encoding='utf-8') as fh:
 			system = fh.read()
 	except OSError as e:
 		return None, str(e)
-	mech = '\n'.join(('確定 ' if f.sure else '要判定 ') + f.line() for f in found) or 'なし'
-	prompt = (
-		f'## 会話の文脈(古い順)\n\n{context or "なし"}\n\n'
-		f'## 機械検査の結果\n\n{mech}\n\n'
-		f'## 査読対象の応答文\n\n{strip_fences(target)}\n'
-	)
 	cmd = [
-		claude, '-p', '--model', MODEL, '--effort', 'medium',
-		'--output-format', 'json', '--json-schema', json.dumps(SCHEMA),
+		claude, '-p', '--model', model,
+		'--output-format', 'json', '--json-schema', json.dumps(schema),
 		'--tools', '', '--setting-sources', '', '--settings', '{"disableAllHooks":true}',
 		'--no-session-persistence', '--system-prompt', system,
-	]
+	] + (['--effort', effort] if effort else [])
 	env = dict(os.environ, CHECK_PROSE_CHILD='1')
 	err = None
 	for _ in range(LLM_ATTEMPTS):
@@ -580,11 +625,38 @@ def llm_review(target, context, found):
 				err = type(e).__name__
 				continue
 		try:
-			out = json.loads(r.stdout)
-			return out['structured_output']['violations'], None
+			return json.loads(r.stdout)['structured_output'], None
 		except (ValueError, KeyError, TypeError):
 			err = f'bad output: rc={r.returncode} {r.stderr.strip()[:200]}'
 	return None, err
+
+
+def llm_review(target, context, found):
+	mech = '\n'.join(('確定 ' if f.sure else '要判定 ') + f.line() for f in found) or 'なし'
+	prompt = (
+		f'## 会話の文脈(古い順)\n\n{context or "なし"}\n\n'
+		f'## 機械検査の結果\n\n{mech}\n\n'
+		f'## 査読対象の応答文\n\n{strip_fences(target)}\n'
+	)
+	out, err = run_claude(MODEL, RUBRIC, prompt, SCHEMA, 'medium')
+	try:
+		return (out['violations'], None) if out is not None else (None, err)
+	except (KeyError, TypeError):
+		return None, 'bad output: no violations'
+
+
+def verify_review(target, log_text):
+	"""確認省略の判定, 差し戻し理由またはNone"""
+	prompt = (
+		f'## 最後のユーザ発言以降の記録(古い順)\n\n{log_text or "なし"}\n\n'
+		f'## 判定対象の最終応答\n\n{strip_fences(target)}\n'
+	)
+	out, err = run_claude(VERIFY_MODEL, VERIFY_RUBRIC, prompt, VERIFY_SCHEMA)
+	if out is None:
+		return None, err
+	if out.get('ok') or out.get('impossible') or not out.get('reason'):
+		return None, None
+	return out['reason'], None
 
 
 # ---- 出力 ----
@@ -615,24 +687,38 @@ def findings_lines(sure, violations):
 	return lines
 
 
-def report(sure, violations):
-	head = [
-		f'{MARKER}で違反を検出。指摘箇所をすべて書き直した最終応答を、改めて全文出力すること。',
-		'書き直しでは結論, 動機, 振る舞い, 詳細の順に書き、技術用語は正式名称を使うこと。',
-	]
+def report(sure, violations, unverified=None):
+	head = [f'{MARKER}で違反を検出。']
+	if unverified:
+		head += ['確認できる事柄を確認せずに報告している。以下の事柄を確認してから最終応答を書き直すこと。', unverified]
+	if sure or violations:
+		head += [
+			'指摘箇所をすべて書き直した最終応答を、改めて全文出力すること。',
+			'書き直しでは結論, 動機, 振る舞い, 詳細の順に書き、技術用語は正式名称を使うこと。',
+		]
 	return '\n'.join(head + findings_lines(sure, violations))
 
 
-def audit(target, context, use_llm=True):
+def audit(target, context, use_llm=True, log_text=None):
+	"""log_text指定時のみ確認省略を判定"""
 	found = mechanical(target)
 	sure = [f for f in found if f.sure]
-	violations, err, elapsed = [], None, 0.0
+	violations, unverified, errs, elapsed = [], None, [], 0.0
 	if use_llm and len(JP.findall(target)) >= MIN_JP_LLM:
 		start = time.time()
-		res, err = llm_review(target, context, found)
+		with ThreadPoolExecutor(2) as pool:
+			review = pool.submit(llm_review, target, context, found)
+			verify = pool.submit(verify_review, target, log_text) if log_text is not None else None
+			res, err = review.result()
+			if err:
+				errs.append(f'Sonnet: {err}')
+			if verify:
+				unverified, err = verify.result()
+				if err:
+					errs.append(f'Haiku: {err}')
 		elapsed = round(time.time() - start, 1)
 		violations = res or []
-	return found, sure, violations, err, elapsed
+	return found, sure, violations, unverified, '; '.join(errs) or None, elapsed
 
 
 class State:
@@ -723,31 +809,31 @@ def _run_hook(payload, state, cursor=False):
 		return 0
 	retries = state.retries(turn)
 	use_llm = os.environ.get('CHECK_PROSE_LLM', '1') != '0'
-	found, sure, violations, err, elapsed = audit(final, context, use_llm)
+	found, sure, violations, unverified, err, elapsed = audit(final, context, use_llm, turn_log(events))
 	state.add([final])
 	log({
 		'time': time.strftime('%Y-%m-%dT%H:%M:%S'), 'session': payload.get('session_id'),
 		'cwd': payload.get('cwd'), 'retry': retries, 'chars': len(final), 'llm_sec': elapsed,
 		'llm_error': err, 'mechanical': [[f.rule, f.quote, f.sure] for f in found],
-		'violations': violations, 'target': final,
+		'violations': violations, 'unverified': unverified, 'target': final,
 	})
 	# Cursorのstopは警告表示の出力項目なし
-	warn = f'{MARKER}: Sonnetの査読に失敗 ({err})' if err and not cursor else None
-	if not sure and not violations:
+	warn = f'{MARKER}: LLMの判定に失敗 ({err})' if err and not cursor else None
+	if not sure and not violations and not unverified:
 		if warn:
 			emit({'systemMessage': warn})
 		return 0
 	if retries >= MAX_RETRY:
 		# 差し戻し上限, 残った違反をユーザへ表示
 		if not cursor:
-			emit({'systemMessage': '\n'.join([f'{MARKER}: 差し戻し{retries}回後も違反が残っています'] + findings_lines(sure, violations))})
+			emit({'systemMessage': '\n'.join([f'{MARKER}: 差し戻し{retries}回後も違反が残っています'] + ([f'- [確認の省略] {unverified}'] if unverified else []) + findings_lines(sure, violations))})
 		return 0
 	state.blocked(turn)
 	state.save()
 	if cursor:
-		emit({'followup_message': report(sure, violations)})
+		emit({'followup_message': report(sure, violations, unverified)})
 		return 0
-	out = {'decision': 'block', 'reason': report(sure, violations)}
+	out = {'decision': 'block', 'reason': report(sure, violations, unverified)}
 	if warn:
 		out['systemMessage'] = warn
 	emit(out)
@@ -756,7 +842,7 @@ def _run_hook(payload, state, cursor=False):
 
 def run_text(path, use_llm):
 	text = sys.stdin.read() if path == '-' else open(path, encoding='utf-8').read()
-	found, sure, violations, err, elapsed = audit(text, '', use_llm)
+	found, sure, violations, _, err, elapsed = audit(text, '', use_llm)
 	for f in found:
 		print(('NG ' if f.sure else '?  ') + f.line())
 	for v in violations:
