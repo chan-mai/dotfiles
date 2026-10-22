@@ -19,8 +19,8 @@ EXTS = {
 
 JP = re.compile(r'[ぁ-んァ-ヶ一-龠]')
 
-# 検査器自身のパターン定義と規則文書を除外
-EXCLUDE = re.compile(r'(^|/)agents/(hooks/|AGENTS\.md$)')
+# 検査器自身のパターン定義と規則文書(AGENTS.md, output style)を除外
+EXCLUDE = re.compile(r'(^|/)(agents/(hooks/|AGENTS\.md$)|claude/output-styles/)')
 
 # 比喩・擬人化・口語の禁止語(発生した違反で拡充する)
 BANNED = [
@@ -60,6 +60,9 @@ BANNED = [
 	('断る(擬人化)', re.compile(r'断[るら]')),
 	('許す(擬人化)', re.compile(r'許[すさせ]')),
 	('気付かれない(擬人化)', re.compile(r'気付かれ|気づかれ')),
+	('口(エンドポイント等の言い換え)', re.compile(r'(?<![入出窓人糸河火港突破蛇早閉利悪軽])口(?![座頭調径癖実述語紅元止付車])')),
+	('砂場(サンドボックスの言い換え)', re.compile(r'砂場')),
+	('窓(ウィンドウの言い換え)', re.compile(r'(?<![検])窓(?!口)')),
 ]
 
 # 読点・括弧・スペース
@@ -152,6 +155,7 @@ def self_test():
 		('a.md', '| `rate` | `null` | 一定時間あたりの実行数の上限 |'),
 		('a.ts', '// 有効にした場合の低下は実測で約17%'),
 		('a.md', '`concurrencyKey`がnullのジョブには適用されません。'),
+		('a.md', '入口と出口の人口'),
 	]
 	ng = [
 		('a.ts', '// 満タンのキーは含めない'),
@@ -165,6 +169,7 @@ def self_test():
 		('a.ts', '// 出力の正規化で除外する'),
 		('a.ts', '// 満杯なら書かない。'),
 		('a.ts', '// 反映が遅れるため, 再取得'),
+		('a.md', '登録用の口を追加'),
 	]
 	bad = [t for t in ok if check([t])]
 	missed = [t for t in ng if not check([t])]

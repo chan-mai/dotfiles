@@ -44,6 +44,11 @@
             "type": "command",
             "command": "python3 \"$HOME/dotfiles/agents/hooks/check-style.py\"",
             "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "\"$HOME/dotfiles/agents/hooks/check-prose.sh\"",
+            "timeout": 600
           }
         ]
       }
@@ -102,6 +107,7 @@
     }
   },
   "effortLevel": "xhigh",
+  "outputStyle": "japanese-prose",
   "tui": "fullscreen",
   "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,

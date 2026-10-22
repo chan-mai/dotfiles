@@ -48,9 +48,10 @@ in
   home.file = {
     # skills実体
     ".claude/skills".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.agents/skills";
-    # 共通指示, opencode側はAGENTS.mdとして参照
+    # 共通指示, opencode, pi, Codex側はAGENTS.mdとして参照
     ".claude/CLAUDE.md".source = link "agents/AGENTS.md";
     ".claude/settings.json".source = link "claude/settings.json";
+    ".claude/output-styles".source = link "claude/output-styles";
     ".zshrc".source = link "zsh/zshrc";
     ".zshenv".source = link "zsh/zshenv";
     ".zprofile".source = link "zsh/zprofile";
@@ -58,6 +59,23 @@ in
     ".pi/agent/settings.json".source = link "pi/settings.json";
     ".pi/agent/custom-provider.json".source = link "pi/custom-provider.json";
     ".pi/agent/extensions/review.ts".source = link "pi/extensions/review.ts";
+    ".pi/agent/extensions/check-prose.ts".source = link "pi/extensions/check-prose.ts";
+    ".pi/agent/AGENTS.md".source = link "agents/AGENTS.md";
+    ".codex/AGENTS.md".source = link "agents/AGENTS.md";
+    # 応答文検査, 差し戻し上限はcheck-prose.py側で管理
+    ".cursor/hooks.json".text = builtins.toJSON {
+      version = 1;
+      hooks = {
+        afterAgentResponse = [ { command = "${dotfiles}/agents/hooks/check-prose.sh"; } ];
+        stop = [
+          {
+            command = "${dotfiles}/agents/hooks/check-prose.sh";
+            timeout = 600;
+            loop_limit = null;
+          }
+        ];
+      };
+    };
   };
 
   programs.neovim = {
@@ -84,6 +102,7 @@ in
   # ファイル単位リンク, node_modules等の実行時生成物はopencode管理
   xdg.configFile."opencode/AGENTS.md".source = link "agents/AGENTS.md";
   xdg.configFile."opencode/plugins/check-style.js".source = link "agents/hooks/opencode-check-style.js";
+  xdg.configFile."opencode/plugins/check-prose.js".source = link "agents/hooks/opencode-check-prose.js";
   xdg.configFile."opencode/opencode.jsonc".source = link "opencode/opencode.jsonc";
   xdg.configFile."opencode/tui.json".source = link "opencode/tui.json";
 }

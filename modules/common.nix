@@ -21,6 +21,12 @@
       config-connector
     ]))
     herdr
+    # 応答文検査hook用
+    ja-prose-python
+    (textlint.withPackages [
+      textlint-rule-preset-ai-words-ja
+      textlint-rule-preset-ja-technical-writing
+    ])
     just
     k3d
     kubectl
