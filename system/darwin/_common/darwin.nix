@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   # terraform用(BUSL)
@@ -75,6 +75,15 @@
       done
       /usr/bin/chgrp access_bpf /dev/bpf*
       /bin/chmod g+rw /dev/bpf*
+    '';
+    serviceConfig.RunAtLoad = true;
+  };
+
+  # Codexデスクトップ用, launchdへAPIキー登録
+  launchd.user.agents.codex-lb-env = {
+    script = ''
+      . "${config.users.users.mq1.home}/.secrets.zsh"
+      /bin/launchctl setenv CODEX_LB_API_KEY "$CODEX_LB_API_KEY"
     '';
     serviceConfig.RunAtLoad = true;
   };
