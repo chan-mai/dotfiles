@@ -8,6 +8,7 @@
     coderabbit-cli
     mlx-serve
     cargo-audit
+    cf
     delve
     go-tools
     gopls
