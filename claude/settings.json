@@ -6,23 +6,16 @@
   },
   "permissions": {
     "ask": [
-      "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git restore:*)",
       "Bash(git stash:*)",
       "Bash(git reset:*)",
-      "Bash(git checkout:*)",
-      "Bash(git switch:*)",
-      "Bash(git rm:*)",
-      "Bash(git mv:*)",
+      "Bash(git push:*)",
       "Bash(git apply:*)",
       "Bash(git update-index:*)",
       "Bash(git read-tree:*)",
-      "Bash(git merge:*)",
       "Bash(git rebase:*)",
-      "Bash(git cherry-pick:*)",
-      "Bash(git revert:*)",
-      "Bash(git pull:*)"
+      "Bash(git revert:*)"
     ]
   },
   "hooks": {
