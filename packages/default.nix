@@ -6,4 +6,9 @@ final: prev: {
   mlx-serve = final.callPackage ./mlx-serve { };
   # nixpkgs版vlcとの衝突回避
   vlc-bin = final.callPackage ./vlc { };
+  # NOTE: nixpkgs#587711マージまでの仮対応
+  # あとでなんとかしたい
+  worker-build = prev.worker-build.overrideAttrs (o: {
+    buildInputs = o.buildInputs ++ [ final.zstd ];
+  });
 }
