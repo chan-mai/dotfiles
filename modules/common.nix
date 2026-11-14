@@ -65,7 +65,6 @@
     (yt-dlp.overridePythonAttrs (old: {
       dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
     }))
-    zsh-autosuggestions
     # GUI
     dbeaver-bin
     google-chrome

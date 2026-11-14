@@ -16,6 +16,8 @@
   # Nix本体はDeterminate Nixが管理
   nix.enable = false;
 
+  programs.zsh.enableAutosuggestions = true;
+
   # sudoのTouch ID認証
   security.pam.services.sudo_local.touchIdAuth = true;
 
