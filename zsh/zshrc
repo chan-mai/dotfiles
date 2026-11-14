@@ -1,6 +1,19 @@
 # home-manager管理の環境変数
 [ -f /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh ] && . /etc/profiles/per-user/mq1/etc/profile.d/hm-session-vars.sh
 
+HISTSIZE=100000
+SAVEHIST=100000
+
+# /etc/zshrcのprompt suse解除
+(( $+functions[prompt] )) && prompt off
+autoload -Uz vcs_info add-zsh-hook
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats ' (%b)'
+zstyle ':vcs_info:git:*' actionformats ' (%b|%a)'
+add-zsh-hook precmd vcs_info
+setopt PROMPT_SUBST
+PROMPT='%~${vcs_info_msg_0_} %# '
+
 source "$HOME/dotfiles/zsh/tools/dotfiles.zsh"
 source "$HOME/dotfiles/zsh/tools/pi.zsh"
 [ -f "$HOME/.secrets.zsh" ] && source "$HOME/.secrets.zsh"
