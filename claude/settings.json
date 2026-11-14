@@ -26,11 +26,18 @@
             "type": "command",
             "command": "python3 \"$HOME/dotfiles/agents/hooks/check-style.py\"",
             "timeout": 60
-          },
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
           {
             "type": "command",
-            "command": "\"$HOME/dotfiles/agents/hooks/check-prose.sh\"",
-            "timeout": 600
+            "command": "python3 \"$HOME/dotfiles/agents/hooks/check-comment.py\"",
+            "timeout": 10
           }
         ]
       }
@@ -88,8 +95,8 @@
       }
     }
   },
-  "effortLevel": "xhigh",
   "outputStyle": "japanese-prose",
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,
