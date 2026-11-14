@@ -32,10 +32,18 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- LSP, 実行ファイルのあるサーバのみ
-local servers = { "gopls", "rust_analyzer", "ts_ls", "pyright", "lua_ls", "nil_ls", "terraformls", "yamlls" }
-for _, name in ipairs(servers) do
-  local cmd = (vim.lsp.config[name] or {}).cmd
-  if type(cmd) == "table" and vim.fn.executable(cmd[1]) == 1 then
+local servers = {
+  gopls = "gopls",
+  rust_analyzer = "rust-analyzer",
+  ts_ls = "typescript-language-server",
+  pyright = "pyright-langserver",
+  lua_ls = "lua-language-server",
+  nil_ls = "nil",
+  terraformls = "terraform-ls",
+  yamlls = "yaml-language-server",
+}
+for name, bin in pairs(servers) do
+  if vim.fn.executable(bin) == 1 then
     vim.lsp.enable(name)
   end
 end

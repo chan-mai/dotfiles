@@ -33,8 +33,10 @@
     kubelogin-oidc
     kubernetes-helm
     kustomize
+    lua-language-server
     mkcert
     mysql84
+    nil
     nodejs_26
     opencode
     osv-scanner
@@ -44,6 +46,7 @@
     poppler-utils
     postgresql
     prettier
+    pyright
     python3
     rdap
     ripgrep
@@ -52,9 +55,12 @@
     sshpass
     ssm-session-manager-plugin
     terraform
+    terraform-ls
+    typescript-language-server
     uv
     wasm-pack
     wrangler
+    yaml-language-server
     # curl-cffi 0.15はdarwinビルド不可, unstable到達後に除外解除
     (yt-dlp.overridePythonAttrs (old: {
       dependencies = builtins.filter (d: (d.pname or "") != "curl-cffi") old.dependencies;
