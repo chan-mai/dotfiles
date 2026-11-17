@@ -1,0 +1,34 @@
+# proto-file: src/protocol/config.proto
+# proto-message: mozc.config.Config
+
+# 文字種
+character_form_rules { group: "ア" preedit_character_form: FULL_WIDTH conversion_character_form: FULL_WIDTH }
+character_form_rules { group: "A" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "0" preedit_character_form: HALF_WIDTH conversion_character_form: HALF_WIDTH }
+character_form_rules { group: "(){}[]" preedit_character_form: HALF_WIDTH conversion_character_form: HALF_WIDTH }
+character_form_rules { group: ".," preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "。、" preedit_character_form: FULL_WIDTH conversion_character_form: FULL_WIDTH }
+character_form_rules { group: "・「」" preedit_character_form: FULL_WIDTH conversion_character_form: FULL_WIDTH }
+character_form_rules { group: "\"'" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: ":;" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "#%&@$^_|`\\" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "~" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "<>=+-/*" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+character_form_rules { group: "?!" preedit_character_form: FULL_WIDTH conversion_character_form: LAST_FORM }
+
+# 入力補助
+use_auto_conversion: false
+use_direct_commit: false
+shift_key_mode_switch: ASCII_INPUT_MODE
+
+# ライブ変換
+use_live_conversion: true
+live_conversion_delay_msec: 0
+show_live_conversion_ruby_window: true
+
+# Zenzライブ補正
+use_zenz_live_correction: true
+zenz_live_correction_delay_msec: 0
+defer_live_conversion_display_until_zenz_result: true
+zenz_deferred_presentation_timeout_msec: 800
+use_zenz_live_correction_right_context: true

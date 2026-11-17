@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./mozkey.nix ];
+
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   # ホスト固有パッケージ
