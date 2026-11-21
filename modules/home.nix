@@ -62,6 +62,7 @@ in
     ".pi/agent/extensions/check-comment.ts".source = link "pi/extensions/check-comment.ts";
     ".pi/agent/AGENTS.md".source = link "agents/AGENTS.md";
     ".codex/AGENTS.md".source = link "agents/AGENTS.md";
+    ".dsh/AGENTS.md".source = link "agents/AGENTS.md";
     # 追加コメント確認, afterFileEditで記録, stopで差し戻し
     ".cursor/hooks.json".text = builtins.toJSON {
       version = 1;
