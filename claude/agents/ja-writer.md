@@ -2,6 +2,7 @@
 name: ja-writer
 description: 指示された事実をもとにドキュメント, README, リリースノート, PR本文等の日本語の文章を生成または書き換える
 model: gemini/gemini-4-neon
+effort: medium
 tools: Read
 ---
 
