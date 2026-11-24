@@ -52,6 +52,7 @@ in
     ".claude/CLAUDE.md".source = link "agents/AGENTS.md";
     ".claude/settings.json".source = link "claude/settings.json";
     ".claude/output-styles".source = link "claude/output-styles";
+    ".claude/agents".source = link "claude/agents";
     ".zshrc".source = link "zsh/zshrc";
     ".zshenv".source = link "zsh/zshenv";
     ".zprofile".source = link "zsh/zprofile";
