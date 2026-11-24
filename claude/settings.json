@@ -1,5 +1,5 @@
 {
-  "apiKeyHelper": "op read --account my.1password.com \"op://Personal/ou4mlg3epslpfk7zijonuk2tua/credential\"",
+  "apiKeyHelper": ". \"$HOME/.secrets.zsh\" && printf '%s' \"$BIFROST_API_KEY\"",
   "env": {
     "ANTHROPIC_BASE_URL": "https://llm.nq2.day/anthropic",
     "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1114112"
