@@ -1,4 +1,9 @@
 {
+  "apiKeyHelper": "op read --account my.1password.com \"op://Personal/ou4mlg3epslpfk7zijonuk2tua/credential\"",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://llm.nq2.day/anthropic",
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1114112"
+  },
   "attribution": {
     "commit": "",
     "pr": "",
@@ -158,7 +163,51 @@
       "Bash(gh api * --input*)"
     ]
   },
-  "model": "opus",
+  "model": "anthropic/claude-opus-5-5",
+  "modelPicker": {
+    "options": [
+      {
+        "model": "gemini/gemini-4-hydrogen"
+      },
+      {
+        "model": "gemini/gemini-4-neon"
+      },
+      {
+        "model": "mistral/deepseek-v4-1-flash-1017"
+      },
+      {
+        "model": "mistral/zai-glm-5-3"
+      },
+      {
+        "model": "mistral/zai-glm-5-3-flash"
+      },
+      {
+        "model": "openai/gpt-6.2-astra"
+      },
+      {
+        "model": "openai/gpt-6.2-sol"
+      },
+      {
+        "model": "anthropic/claude-fable-5-2"
+      },
+      {
+        "model": "anthropic/claude-haiku-5-5"
+      },
+      {
+        "model": "anthropic/claude-opus-5-5"
+      },
+      {
+        "model": "anthropic/claude-sonnet-5-5"
+      },
+      {
+        "model": "sarashina.ai/sarashina3-mini"
+      },
+      {
+        "model": "sarashina.ai/sarashina3.2-mini-thinking"
+      }
+    ],
+    "replaceBuiltInOptions": true
+  },
   "hooks": {
     "Stop": [
       {
@@ -238,6 +287,29 @@
   },
   "outputStyle": "japanese-prose",
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "mistral/deepseek-v4-1-flash-1017": {
+      "autoCompactWindow": 1048576
+    },
+    "mistral/zai-glm-5-3": {
+      "autoCompactWindow": 1048576
+    },
+    "mistral/zai-glm-5-3-flash": {
+      "autoCompactWindow": 1048576
+    },
+    "openai/gpt-6.2-astra": {
+      "autoCompactWindow": 922000
+    },
+    "openai/gpt-6.2-sol": {
+      "autoCompactWindow": 922000
+    },
+    "sarashina.ai/sarashina3-mini": {
+      "autoCompactWindow": 128000
+    },
+    "sarashina.ai/sarashina3.2-mini-thinking": {
+      "autoCompactWindow": 128000
+    }
+  },
   "tui": "fullscreen",
   "switchModelsOnFlag": false,
   "inputNeededNotifEnabled": true,
