@@ -66,7 +66,6 @@
   };
   hardware.bluetooth.enable = true;
   services.openssh.enable = true;
-  services.tailscale.enable = true;
 
   programs._1password.enable = true;
   programs._1password-gui = {

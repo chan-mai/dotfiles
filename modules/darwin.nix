@@ -6,7 +6,6 @@
     ghostty-bin
     maccy
     scroll-reverser
-    tailscale-gui
     vlc-bin
   ];
 }
